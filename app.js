@@ -379,6 +379,7 @@
     const subject = getSubject(state.selectedSubjectId);
     const theme = getTheme(state.selectedSubjectId, state.selectedThemeId);
     const stats = getThemeProgress(subject.id, theme.id);
+    const nextCourse = getNextCourseForSubject(subject.id);
     view.innerHTML = `
       <header class="page-heading">
         <span class="tag">${subject.label}</span>
@@ -386,6 +387,7 @@
         <h1>${theme.label}</h1>
         <p>${formatCourseCount(stats.totalCourses)}, ${formatExerciseCount(stats.totalExercises)}. Lis un cours, puis entraîne-toi sur les exercices qui lui sont liés.</p>
         <div class="button-row">
+          ${nextCourse ? `<button class="primary" data-open-course="${nextCourse.id}" type="button">Continuer les cours</button>` : ""}
           <button class="secondary" data-open-subject="${subject.id}" type="button">Retour à la matière</button>
         </div>
       </header>
@@ -428,6 +430,7 @@
     const currentIndex = themeCourses.findIndex((item) => item.id === courseItem.id);
     const previousCourse = currentIndex > 0 ? themeCourses[currentIndex - 1] : null;
     const nextCourse = currentIndex >= 0 && currentIndex < themeCourses.length - 1 ? themeCourses[currentIndex + 1] : null;
+    const nextUnreadCourse = getNextUnreadCourseAfter(courseItem.id);
     view.innerHTML = `
       <article class="course-page">
         ${renderBreadcrumb([
@@ -455,6 +458,7 @@
           ${courseItem.exercises.length
             ? `<button class="secondary" data-start-course-exercises="${courseItem.id}" type="button">Faire les exercices liés</button>`
             : `<button class="secondary" type="button" disabled>Exercices bientôt disponibles</button>`}
+          ${nextUnreadCourse ? `<button class="primary" data-open-course="${nextUnreadCourse.id}" type="button">Cours suivant</button>` : ""}
           <button class="secondary" data-open-theme="${path.theme.id}" type="button">Retour au thème</button>
         </div>
         <div class="course-nav">
@@ -924,6 +928,18 @@
       subjectCourses[0];
   }
 
+  function getNextUnreadCourseAfter(courseId) {
+    const path = getCoursePath(courseId);
+    const subjectCourses = flat.courses
+      .filter((item) => item.subject.id === path.subject.id)
+      .map((item) => item.course);
+    const currentIndex = subjectCourses.findIndex((course) => course.id === courseId);
+    const remainingCourses = subjectCourses.slice(currentIndex + 1);
+    return remainingCourses.find((course) => !isCourseRead(course.id) && course.status !== "structure") ||
+      subjectCourses.find((course) => course.id !== courseId && !isCourseRead(course.id) && course.status !== "structure") ||
+      null;
+  }
+
   function renderRecentCourseReads(subjectId) {
     const items = progress.courseReads
       .filter((item) => item.subjectId === subjectId)
@@ -1079,6 +1095,10 @@
     return `${count} exercice${count > 1 ? "s" : ""}`;
   }
 
+  function formatDoneExerciseCount(count) {
+    return `${count} exercice${count > 1 ? "s" : ""} fait${count > 1 ? "s" : ""}`;
+  }
+
   function formatAnswerCount(count) {
     return `${count} réponse${count > 1 ? "s" : ""}`;
   }
@@ -1160,8 +1180,8 @@
         tier: "bronze",
         value: stats.readCourses,
         target: courseBronze,
-        requirement: `${courseBronze} cours lus`,
-        nextText: `Argent : ${courseSilver} cours lus · Or : ${courseGold} cours lus`,
+        requirement: `Objectif : ${formatReadCourseCount(courseBronze)}`,
+        nextText: `Argent : ${formatReadCourseCount(courseSilver)} · Or : ${formatReadCourseCount(courseGold)}`,
         actionView: "subjects",
         actionSubject: subject.id,
         actionText: "Lire un cours"
@@ -1173,8 +1193,8 @@
         tier: "silver",
         value: stats.readCourses,
         target: courseSilver,
-        requirement: `${courseSilver} cours lus`,
-        nextText: `Or : ${courseGold} cours lus`,
+        requirement: `Objectif : ${formatReadCourseCount(courseSilver)}`,
+        nextText: `Or : ${formatReadCourseCount(courseGold)}`,
         actionView: "subjects",
         actionSubject: subject.id,
         actionText: "Lire un cours"
@@ -1186,8 +1206,8 @@
         tier: "gold",
         value: stats.readCourses,
         target: courseGold,
-        requirement: `${courseGold} cours lus`,
-        nextText: "Tous les cours de cette matière sont lus",
+        requirement: `Objectif : ${formatReadCourseCount(courseGold)}`,
+        nextText: "Or : lire tous les cours de cette matière",
         actionView: "subjects",
         actionSubject: subject.id,
         actionText: "Relire les cours"
@@ -1199,8 +1219,8 @@
         tier: "bronze",
         value: stats.uniqueExercisesDone,
         target: exerciseBronze,
-        requirement: `${exerciseBronze} exercices faits`,
-        nextText: `Argent : ${exerciseSilver} exercices · Or : ${exerciseGold} exercices`,
+        requirement: `Objectif : ${formatDoneExerciseCount(exerciseBronze)}`,
+        nextText: `Argent : ${formatDoneExerciseCount(exerciseSilver)} · Or : ${formatDoneExerciseCount(exerciseGold)}`,
         actionView: "subjects",
         actionSubject: subject.id,
         actionText: "Faire des exercices"
@@ -1212,8 +1232,8 @@
         tier: "silver",
         value: stats.uniqueExercisesDone,
         target: exerciseSilver,
-        requirement: `${exerciseSilver} exercices faits`,
-        nextText: `Or : ${exerciseGold} exercices faits`,
+        requirement: `Objectif : ${formatDoneExerciseCount(exerciseSilver)}`,
+        nextText: `Or : ${formatDoneExerciseCount(exerciseGold)}`,
         actionView: "subjects",
         actionSubject: subject.id,
         actionText: "Faire des exercices"
@@ -1225,8 +1245,8 @@
         tier: "gold",
         value: stats.uniqueExercisesDone,
         target: exerciseGold,
-        requirement: `${exerciseGold} exercices faits`,
-        nextText: "Tous les exercices de cette matière sont faits",
+        requirement: `Objectif : ${formatDoneExerciseCount(exerciseGold)}`,
+        nextText: "Or : faire tous les exercices de cette matière",
         actionView: "subjects",
         actionSubject: subject.id,
         actionText: "Faire des exercices"
