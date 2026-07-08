@@ -364,7 +364,7 @@
       subject("mathematiques", "Mathématiques", [
         theme("nombres-calculs", "Nombres et calculs", [
           course("math-nombres-relatifs", "Nombres relatifs", "Comparer et calculer avec des nombres positifs et négatifs.", ["Un nombre négatif est plus petit que zéro.", "Pour additionner deux nombres de signes contraires, on soustrait les distances à zéro.", "Le résultat prend le signe du nombre le plus éloigné de zéro."], "(-7) + 3 = -4.", [
-            qcm("math-nombres-relatifs-1", "Quel calcul donne -4 ?", ["-7 + 3", "7 + 3", "-7 - 3", "4 - 0"], "-7 + 3", "Compare les distances à zéro : 7 est plus grand que 3, donc le résultat garde le signe moins.", "On calcule 7 - 3 = 4, puis on garde le signe du nombre le plus éloigné de zéro."),
+            qcm("math-nombres-relatifs-1", "Quel calcul donne -4 ?", ["-7 + 3", "7 + 3", "-7 - 3", "4 - 0"], "-7 + 3", "Compare les distances à zéro : 7 est plus grand que 3, donc le résultat garde le signe moins.", "Avec -7 + 3, tu pars de -7 puis tu avances de 3 unités vers la droite : -6, -5, -4."),
             short("math-nombres-relatifs-2", "Calcule : -5 - 6", "-11", "Soustraire 6 revient à reculer encore de 6 sur la droite graduée.", "-5 - 6 = -11.")
           ]),
           course("math-fractions", "Fractions", "Simplifier, comparer et utiliser des fractions.", ["Une fraction représente un partage.", "Simplifier une fraction, c'est diviser le haut et le bas par le même nombre.", "La valeur ne change pas si on divise le numérateur et le dénominateur par le même nombre."], "18/30 = 3/5 car on divise 18 et 30 par 6.", [
