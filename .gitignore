@@ -1,0 +1,18 @@
+﻿# Local secrets
+.env
+*.env
+*token*
+*Token*
+*secret*
+*Secret*
+Token github.txt
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary
+*.tmp
+*.log

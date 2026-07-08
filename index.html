@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brevet Sprint V2</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo">B</span>
+        <div>
+          <strong>Brevet Sprint</strong>
+          <small>Version 2 alpha</small>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-button active" data-view="home" type="button">Accueil</button>
+        <button class="nav-button" data-view="subjects" type="button">Matières</button>
+        <button class="nav-button" data-view="badges" type="button">Badges</button>
+        <button class="nav-button" data-view="progress" type="button">Progression</button>
+        <button class="nav-button" data-view="settings" type="button">Paramètres</button>
+        <button class="nav-button" data-view="contact" type="button">Me contacter</button>
+      </nav>
+    </aside>
+
+    <main class="app">
+      <section id="view"></section>
+    </main>
+
+    <script src="data/catalog.js"></script>
+    <script src="data/missing-structure.js"></script>
+    <script src="data/reorganize-themes.js"></script>
+    <script src="data/course-lessons.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
