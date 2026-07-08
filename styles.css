@@ -686,6 +686,36 @@ input {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.progress-box {
+  display: grid;
+  gap: 8px;
+}
+
+.progress-box-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+}
+
+.mini-medal.image-medal {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  background: transparent;
+  overflow: visible;
+}
+
+.mini-medal.image-medal img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.32));
+}
+
 .progress-duo span,
 .theme-progress span {
   color: var(--muted);
@@ -696,6 +726,11 @@ input {
 .progress-duo strong {
   display: block;
   margin-top: 4px;
+}
+
+.progress-duo small {
+  color: var(--muted);
+  font-weight: 800;
 }
 
 .theme-grid {

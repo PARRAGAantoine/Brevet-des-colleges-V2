@@ -233,23 +233,31 @@
             <span class="tag">${subject.label}</span>
             <h3>${subject.label}</h3>
           </div>
-          <div class="badge-medal image-medal ${courseBadge.className}">
-            <img src="${getSubjectBadgeAsset(subject.id, courseBadge.className)}" alt="">
-          </div>
         </div>
         <div class="progress-duo">
-          <div>
-            <span>Cours</span>
+          <div class="progress-box">
+            <div class="progress-box-head">
+              <span>Cours</span>
+              <div class="mini-medal image-medal ${courseBadge.className}">
+                <img src="${getSubjectBadgeAsset(subject.id, courseBadge.className)}" alt="">
+              </div>
+            </div>
             <div class="progress-track"><span style="width:${stats.coursePercent}%"></span></div>
             <strong>${stats.readCourses} / ${stats.totalCourses}</strong>
+            <small>Badge : ${courseBadge.label}</small>
           </div>
-          <div>
-            <span>Exercices</span>
+          <div class="progress-box">
+            <div class="progress-box-head">
+              <span>Exercices</span>
+              <div class="mini-medal image-medal ${exerciseBadge.className}">
+                <img src="assets/badges/badge-questions-${exerciseBadge.className}.webp" alt="">
+              </div>
+            </div>
             <div class="progress-track exercise"><span style="width:${stats.exerciseProgress}%"></span></div>
             <strong>${stats.uniqueExercisesDone} / ${stats.totalExercises}</strong>
+            <small>Badge : ${exerciseBadge.label}</small>
           </div>
         </div>
-        <p class="muted">Badge cours : ${courseBadge.label} · Badge exercices : ${exerciseBadge.label}</p>
         <div class="button-row">
           <button class="primary" data-open-subject="${subject.id}" type="button">Voir la matière</button>
           <button class="secondary" data-open-badges="${subject.id}" type="button">Badges</button>
