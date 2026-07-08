@@ -431,6 +431,10 @@
     const previousCourse = currentIndex > 0 ? themeCourses[currentIndex - 1] : null;
     const nextCourse = currentIndex >= 0 && currentIndex < themeCourses.length - 1 ? themeCourses[currentIndex + 1] : null;
     const nextUnreadCourse = getNextUnreadCourseAfter(courseItem.id);
+    const subjectCourses = flat.courses.filter((item) => item.subject.id === path.subject.id).map((item) => item.course);
+    const subjectCourseIndex = subjectCourses.findIndex((item) => item.id === courseItem.id);
+    const subjectCourseLabel = `Cours ${subjectCourseIndex + 1} / ${subjectCourses.length} en ${path.subject.label}`;
+    const read = isCourseRead(courseItem.id);
     view.innerHTML = `
       <article class="course-page">
         ${renderBreadcrumb([
@@ -443,6 +447,7 @@
           <div>
             <span class="tag">${path.subject.label}</span>
             <span class="tag">${path.theme.label}</span>
+            <span class="tag">${subjectCourseLabel}</span>
             <h1>${courseItem.title}</h1>
             <p>${courseItem.goal}</p>
           </div>
@@ -454,12 +459,12 @@
         </div>
         ${renderLessonBody(courseItem)}
         <div class="button-row">
-          <button class="${isCourseRead(courseItem.id) ? "secondary" : "primary"}" data-mark-read="${courseItem.id}" type="button">${isCourseRead(courseItem.id) ? "Cours déjà validé" : "J'ai lu et compris"}</button>
           ${courseItem.exercises.length
-            ? `<button class="secondary" data-start-course-exercises="${courseItem.id}" type="button">Faire les exercices liés</button>`
+            ? `<button class="primary" data-start-course-exercises="${courseItem.id}" type="button">Faire les exercices liés</button>`
             : `<button class="secondary" type="button" disabled>Exercices bientôt disponibles</button>`}
-          ${nextUnreadCourse ? `<button class="primary" data-open-course="${nextUnreadCourse.id}" type="button">Cours suivant</button>` : ""}
-          <button class="secondary" data-open-theme="${path.theme.id}" type="button">Retour au thème</button>
+          <button class="secondary" data-mark-read="${courseItem.id}" type="button">${read ? "Cours déjà validé" : "J'ai lu et compris"}</button>
+          ${nextUnreadCourse ? `<button class="secondary" data-open-course="${nextUnreadCourse.id}" type="button">Cours suivant</button>` : ""}
+          <button class="secondary" data-open-theme="${path.theme.id}" type="button">Voir les cours du thème</button>
         </div>
         <div class="course-nav">
           ${previousCourse ? `<button class="secondary" data-open-course="${previousCourse.id}" type="button">Cours précédent</button>` : `<span></span>`}
@@ -572,7 +577,7 @@
         <p>${courseItem.goal}</p>
         <div class="button-row">
           <button class="primary" data-open-course="${courseItem.id}" type="button">Lire le cours</button>
-          <button class="secondary" data-open-theme="${path.theme.id}" type="button">Retour au thème</button>
+          <button class="secondary" data-open-theme="${path.theme.id}" type="button">Voir les cours du thème</button>
         </div>
       </section>
     `;
@@ -762,8 +767,8 @@
       <section class="settings-layout section">
         <article class="panel">
           <h2>Version</h2>
-          <p><strong>Version 2 alpha</strong></p>
-          <p class="muted">La V2 est réorganisée pour stabiliser les liens entre matières, thèmes, cours et exercices.</p>
+          <p><strong>Version 2</strong></p>
+          <p class="muted">Les cours, thèmes et exercices sont rangés pour réviser plus simplement.</p>
         </article>
         <article class="panel">
           <h2>Données</h2>
@@ -894,7 +899,7 @@
         <div class="button-row">
           <button class="primary" data-open-course="${courseItem.id}" type="button">Relire le cours</button>
           <button class="secondary" data-start-course-exercises="${courseItem.id}" type="button">Refaire les exercices</button>
-          <button class="secondary" data-open-theme="${path.theme.id}" type="button">Retour au thème</button>
+          <button class="secondary" data-open-theme="${path.theme.id}" type="button">Voir les cours du thème</button>
         </div>
       </section>
     `;
