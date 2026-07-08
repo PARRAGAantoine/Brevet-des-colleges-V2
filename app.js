@@ -186,7 +186,7 @@
         <div>
           <span class="eyebrow">Progression générale</span>
           <h2>${stats.globalPercent} %</h2>
-          <p>${stats.readCourses} cours lus sur ${stats.totalCourses}, ${stats.correctAnswers} bonnes réponses sur ${stats.totalAnswers || 0} exercices faits.</p>
+          <p>${formatReadCourseCount(stats.readCourses)} sur ${stats.totalCourses}, ${stats.uniqueExercisesDone} / ${stats.totalExercises} exercices faits.</p>
         </div>
         <div class="progress-ring" style="--value:${stats.globalPercent}">
           <span>${stats.globalPercent}%</span>
@@ -195,7 +195,7 @@
 
       <section class="stat-grid section">
         <article class="stat-card"><span>Cours</span><strong>${stats.readCourses} / ${stats.totalCourses}</strong><small>lus et compris</small></article>
-        <article class="stat-card"><span>Exercices</span><strong>${stats.totalAnswers}</strong><small>réponses enregistrées</small></article>
+        <article class="stat-card"><span>Exercices</span><strong>${stats.uniqueExercisesDone} / ${stats.totalExercises}</strong><small>${formatAnswerCount(stats.totalAnswers)} enregistrée${stats.totalAnswers > 1 ? "s" : ""}</small></article>
         <article class="stat-card"><span>Réussite</span><strong>${stats.successRate} %</strong><small>sur les exercices faits</small></article>
         <article class="stat-card"><span>À reprendre</span><strong>${stats.pendingErrors}</strong><small>erreurs à corriger</small></article>
       </section>
@@ -287,7 +287,7 @@
         <div>
           <span class="eyebrow">Matière</span>
           <h1>${subject.label}</h1>
-          <p>${stats.readCourses} cours lus sur ${stats.totalCourses} · ${stats.uniqueExercisesDone} exercices faits sur ${stats.totalExercises}. Continue par un cours ou choisis un thème.</p>
+          <p>${formatReadCourseCount(stats.readCourses)} sur ${stats.totalCourses} · ${stats.uniqueExercisesDone} exercices faits sur ${stats.totalExercises}. Continue par un cours ou choisis un thème.</p>
         </div>
         <div class="subject-badge">
           <div class="badge-medal image-medal ${courseBadge.className}">
@@ -363,7 +363,7 @@
           <img src="${getThemeBadgeAsset(courseBadge.className)}" alt="">
         </div>
         <h3>${theme.label}</h3>
-        <p class="muted">${stats.totalCourses} cours · ${stats.totalExercises} exercices.</p>
+        <p class="muted">${formatCourseCount(stats.totalCourses)} · ${formatExerciseCount(stats.totalExercises)}.</p>
         <div class="theme-progress">
           <span>Cours : ${stats.readCourses} / ${stats.totalCourses} · ${courseBadge.label}</span>
           <div class="progress-track"><span style="width:${stats.coursePercent}%"></span></div>
@@ -384,7 +384,7 @@
         <span class="tag">${subject.label}</span>
         <span class="tag">${theme.label}</span>
         <h1>${theme.label}</h1>
-        <p>${stats.totalCourses} cours, ${stats.totalExercises} exercices. Lis un cours, puis entraîne-toi sur les exercices qui lui sont liés.</p>
+        <p>${formatCourseCount(stats.totalCourses)}, ${formatExerciseCount(stats.totalExercises)}. Lis un cours, puis entraîne-toi sur les exercices qui lui sont liés.</p>
         <div class="button-row">
           <button class="secondary" data-open-subject="${subject.id}" type="button">Retour à la matière</button>
         </div>
@@ -619,7 +619,7 @@
       <section class="stat-grid section">
         <article class="stat-card"><span>Progression</span><strong>${global.globalPercent} %</strong><small>sur toute l’application</small></article>
         <article class="stat-card"><span>Cours lus</span><strong>${global.readCourses} / ${global.totalCourses}</strong><small>validés</small></article>
-        <article class="stat-card"><span>Exercices faits</span><strong>${global.uniqueExercisesDone} / ${global.totalExercises}</strong><small>${global.totalAnswers} réponses enregistrées</small></article>
+        <article class="stat-card"><span>Exercices faits</span><strong>${global.uniqueExercisesDone} / ${global.totalExercises}</strong><small>${formatAnswerCount(global.totalAnswers)} enregistrée${global.totalAnswers > 1 ? "s" : ""}</small></article>
         <article class="stat-card"><span>Réussite</span><strong>${global.successRate} %</strong><small>sur les réponses données</small></article>
         <article class="stat-card"><span>À reprendre</span><strong>${global.pendingErrors}</strong><small>erreurs à corriger</small></article>
       </section>
@@ -710,7 +710,7 @@
       <section class="section">
         <div class="section-title">
           <h2>Badges généraux</h2>
-          <span>${global.readCourses} cours lus · ${global.uniqueExercisesDone} / ${global.totalExercises} exercices faits</span>
+          <span>${formatReadCourseCount(global.readCourses)} · ${global.uniqueExercisesDone} / ${global.totalExercises} exercices faits</span>
         </div>
         <div class="badge-gallery">
           ${getGeneralBadgeDefinitions(global).map(renderBadgeCard).join("")}
@@ -720,7 +720,7 @@
       <section class="section">
         <div class="section-title">
           <h2>Badges ${subject.label}</h2>
-          <span>${getSubjectProgress(subject.id).readCourses} cours lus · ${getSubjectProgress(subject.id).uniqueExercisesDone} / ${getSubjectProgress(subject.id).totalExercises} exercices faits</span>
+          <span>${formatReadCourseCount(getSubjectProgress(subject.id).readCourses)} · ${getSubjectProgress(subject.id).uniqueExercisesDone} / ${getSubjectProgress(subject.id).totalExercises} exercices faits</span>
         </div>
         <div class="badge-gallery">
           ${subjectBadges.map(renderBadgeCard).join("")}
@@ -731,6 +731,7 @@
 
   function renderBadgeCard(badge) {
     const stateClass = badge.unlocked ? badge.tier : "locked";
+    const actionAttr = badge.actionSubject ? `data-open-subject="${badge.actionSubject}"` : `data-view="${badge.actionView}"`;
     return `
       <article class="badge-card ${stateClass}">
         <div class="badge-art ${stateClass}">
@@ -742,7 +743,7 @@
         <small>${badge.text}</small>
         <em>${badge.unlocked ? "Débloqué" : badge.requirement}</em>
         <span class="badge-next">${badge.nextText}</span>
-        <button class="badge-action" data-view="${badge.actionView}" type="button">${badge.actionText}</button>
+        <button class="badge-action" ${actionAttr} type="button">${badge.actionText}</button>
       </article>
     `;
   }
@@ -1066,6 +1067,22 @@
     return new Set(values).size;
   }
 
+  function formatCourseCount(count) {
+    return `${count} cours`;
+  }
+
+  function formatReadCourseCount(count) {
+    return `${count} cours lu${count === 1 ? "" : "s"}`;
+  }
+
+  function formatExerciseCount(count) {
+    return `${count} exercice${count > 1 ? "s" : ""}`;
+  }
+
+  function formatAnswerCount(count) {
+    return `${count} réponse${count > 1 ? "s" : ""}`;
+  }
+
   function getBadge(score, hasActivity) {
     if (!hasActivity) return { label: "À gagner", short: "🔒", className: "locked" };
     if (score >= 80) return { label: "Or", short: "Or", className: "gold" };
@@ -1137,7 +1154,7 @@
     const exerciseGold = Math.max(exerciseSilver, stats.totalExercises);
     return [
       badgeDefinition({
-        title: `Cours ${subject.label} bronze`,
+        title: `${subject.label} - cours bronze`,
         text: `Lire les premiers cours de ${subject.label}.`,
         imageBase: getSubjectBadgeBase(subject.id),
         tier: "bronze",
@@ -1146,10 +1163,11 @@
         requirement: `${courseBronze} cours lus`,
         nextText: `Argent : ${courseSilver} cours lus · Or : ${courseGold} cours lus`,
         actionView: "subjects",
+        actionSubject: subject.id,
         actionText: "Lire un cours"
       }),
       badgeDefinition({
-        title: `Cours ${subject.label} argent`,
+        title: `${subject.label} - cours argent`,
         text: `Avancer dans les cours de ${subject.label}.`,
         imageBase: getSubjectBadgeBase(subject.id),
         tier: "silver",
@@ -1158,10 +1176,11 @@
         requirement: `${courseSilver} cours lus`,
         nextText: `Or : ${courseGold} cours lus`,
         actionView: "subjects",
+        actionSubject: subject.id,
         actionText: "Lire un cours"
       }),
       badgeDefinition({
-        title: `Cours ${subject.label} or`,
+        title: `${subject.label} - cours or`,
         text: `Lire tous les cours de ${subject.label}.`,
         imageBase: getSubjectBadgeBase(subject.id),
         tier: "gold",
@@ -1170,10 +1189,11 @@
         requirement: `${courseGold} cours lus`,
         nextText: "Tous les cours de cette matière sont lus",
         actionView: "subjects",
+        actionSubject: subject.id,
         actionText: "Relire les cours"
       }),
       badgeDefinition({
-        title: `Exercices ${subject.label} bronze`,
+        title: `${subject.label} - exercices bronze`,
         text: `Faire les premiers exercices de ${subject.label}.`,
         imageBase: "questions",
         tier: "bronze",
@@ -1182,10 +1202,11 @@
         requirement: `${exerciseBronze} exercices faits`,
         nextText: `Argent : ${exerciseSilver} exercices · Or : ${exerciseGold} exercices`,
         actionView: "subjects",
+        actionSubject: subject.id,
         actionText: "Faire des exercices"
       }),
       badgeDefinition({
-        title: `Exercices ${subject.label} argent`,
+        title: `${subject.label} - exercices argent`,
         text: `S'entraîner régulièrement en ${subject.label}.`,
         imageBase: "questions",
         tier: "silver",
@@ -1194,10 +1215,11 @@
         requirement: `${exerciseSilver} exercices faits`,
         nextText: `Or : ${exerciseGold} exercices faits`,
         actionView: "subjects",
+        actionSubject: subject.id,
         actionText: "Faire des exercices"
       }),
       badgeDefinition({
-        title: `Exercices ${subject.label} or`,
+        title: `${subject.label} - exercices or`,
         text: `Faire tous les exercices classés en ${subject.label}.`,
         imageBase: "questions",
         tier: "gold",
@@ -1206,12 +1228,13 @@
         requirement: `${exerciseGold} exercices faits`,
         nextText: "Tous les exercices de cette matière sont faits",
         actionView: "subjects",
+        actionSubject: subject.id,
         actionText: "Faire des exercices"
       })
     ];
   }
 
-  function badgeDefinition({ title, text, imageBase, tier, value, target, requirement, nextText, actionView, actionText }) {
+  function badgeDefinition({ title, text, imageBase, tier, value, target, requirement, nextText, actionView, actionText, actionSubject = "" }) {
     const safeTarget = Math.max(target, 1);
     const progressValue = Math.min(value, safeTarget);
     return {
@@ -1227,7 +1250,8 @@
       requirement,
       nextText,
       actionView,
-      actionText
+      actionText,
+      actionSubject
     };
   }
 
