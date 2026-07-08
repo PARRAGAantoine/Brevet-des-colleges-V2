@@ -753,7 +753,7 @@
       <header class="page-heading">
         <span class="tag">Paramètres</span>
         <h1>Réglages</h1>
-        <p>Cette page restera simple pendant la construction de la V2.</p>
+        <p>Les réglages servent à adapter l'affichage et à rappeler comment les données sont enregistrées.</p>
       </header>
       <section class="settings-layout section">
         <article class="panel">
@@ -763,7 +763,7 @@
         </article>
         <article class="panel">
           <h2>Données</h2>
-          <p>Tes cours validés et tes réponses restent enregistrés sur cet appareil.</p>
+          <p>Tes cours validés et tes réponses restent enregistrées sur cet appareil.</p>
           <p class="muted">Aucune information n’est envoyée à un serveur dans cette version.</p>
         </article>
         <article class="panel">
@@ -1146,10 +1146,10 @@
 
   function getSubjectBadgeDefinitions(subject) {
     const stats = getSubjectProgress(subject.id);
-    const courseBronze = Math.max(1, Math.ceil(stats.totalCourses * 0.25));
+    const courseBronze = stats.totalCourses ? 1 : 0;
     const courseSilver = Math.max(courseBronze + 1, Math.ceil(stats.totalCourses * 0.6));
     const courseGold = Math.max(courseSilver, stats.totalCourses);
-    const exerciseBronze = Math.max(1, Math.ceil(stats.totalExercises * 0.25));
+    const exerciseBronze = stats.totalExercises ? 1 : 0;
     const exerciseSilver = Math.max(exerciseBronze + 1, Math.ceil(stats.totalExercises * 0.6));
     const exerciseGold = Math.max(exerciseSilver, stats.totalExercises);
     return [
