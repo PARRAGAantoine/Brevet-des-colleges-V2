@@ -470,7 +470,7 @@
           ${courseItem.exercises.length
             ? `<button class="primary" data-start-course-exercises="${courseItem.id}" type="button">Faire les exercices liés</button>`
             : `<button class="secondary" type="button" disabled>Exercices bientôt disponibles</button>`}
-          <button class="secondary" data-mark-read="${courseItem.id}" type="button">${read ? "Cours déjà validé" : "J'ai lu et compris"}</button>
+          <button class="read-confirm" data-mark-read="${courseItem.id}" type="button">${read ? "Cours déjà validé" : "J'ai lu et compris"}</button>
           ${nextUnreadCourse ? `<button class="secondary" data-open-course="${nextUnreadCourse.id}" type="button">Cours suivant</button>` : ""}
           <button class="secondary" data-open-theme="${path.theme.id}" type="button">Voir les cours du thème</button>
         </div>
@@ -534,10 +534,11 @@
 
   function renderLessonExample(example) {
     if (!example) return "";
+    const content = /<\w+/i.test(example) ? example : `<p>${example}</p>`;
     return `
       <div class="lesson-block example-block">
         <h4>Exemple guidé</h4>
-        <p>${example}</p>
+        ${content}
       </div>
     `;
   }
@@ -710,6 +711,7 @@
   function renderBadges() {
     const subject = getSubject(state.selectedSubjectId);
     const global = getGlobalProgress();
+    const subjectProgress = getSubjectProgress(subject.id);
     const subjectBadges = getSubjectBadgeDefinitions(subject);
     view.innerHTML = `
       <header class="page-heading badge-heading">
@@ -727,7 +729,7 @@
       <section class="section">
         <div class="section-title">
           <h2>Badges généraux</h2>
-          <span>${formatReadCourseCount(global.readCourses)} · ${global.uniqueExercisesDone} / ${global.totalExercises} exercices faits</span>
+          <span>${global.readCourses} / ${global.totalCourses} cours lus · ${global.uniqueExercisesDone} / ${global.totalExercises} exercices faits</span>
         </div>
         <div class="badge-gallery">
           ${getGeneralBadgeDefinitions(global).map(renderBadgeCard).join("")}
@@ -737,7 +739,7 @@
       <section class="section">
         <div class="section-title">
           <h2>Badges ${subject.label}</h2>
-          <span>${formatReadCourseCount(getSubjectProgress(subject.id).readCourses)} · ${getSubjectProgress(subject.id).uniqueExercisesDone} / ${getSubjectProgress(subject.id).totalExercises} exercices faits</span>
+          <span>${subjectProgress.readCourses} / ${subjectProgress.totalCourses} cours lus · ${subjectProgress.uniqueExercisesDone} / ${subjectProgress.totalExercises} exercices faits</span>
         </div>
         <div class="badge-gallery">
           ${subjectBadges.map(renderBadgeCard).join("")}

@@ -39,11 +39,25 @@
     ),
     "math-factorisation": mathLesson(
       "Factorisation",
-      "Factoriser, c'est faire l'inverse du développement : on cherche ce qui est commun pour le mettre devant une parenthèse.",
+      "Factoriser, c'est transformer une addition ou une soustraction en multiplication. On fait l'inverse du développement : on cherche un morceau commun, puis on le met devant une parenthèse.",
       ["facteur commun", "parenthèse", "forme factorisée", "forme développée"],
-      ["Cherche un nombre ou une lettre présent dans chaque terme.", "Écris ce facteur commun devant la parenthèse.", "Dans la parenthèse, écris ce qu'il reste de chaque terme.", "Vérifie en redéveloppant."],
-      "6x + 12 = 6 × x + 6 × 2, donc 6x + 12 = 6(x + 2).",
-      ["Prendre un facteur qui n'est pas commun à tous les termes.", "Oublier un terme dans la parenthèse."]
+      [
+        "Découpe l'expression en termes. Dans 6x + 12, les deux termes sont 6x et 12.",
+        "Cherche ce qui apparaît dans tous les termes. Ici, 6 est commun car 6x = 6 × x et 12 = 6 × 2.",
+        "Écris le facteur commun devant une parenthèse : 6(...).",
+        "Dans la parenthèse, écris ce qui reste quand tu as enlevé le facteur commun. Dans 6x, il reste x. Dans 12, il reste 2.",
+        "Garde le signe entre les termes : ici c'est +, donc on obtient 6(x + 2).",
+        "Vérifie en redéveloppant : 6 × x + 6 × 2 = 6x + 12. Si on retrouve le départ, c'est bon."
+      ],
+      `<div class="guided-steps">
+        <p><strong>Expression de départ :</strong> <span class="math-term"><span class="factor-color">6</span>x</span> + <span class="math-term"><span class="factor-color">6</span> × 2</span></p>
+        <p><strong>1. Je repère le facteur commun.</strong> Le nombre <span class="factor-color">6</span> est présent dans les deux morceaux : <span class="factor-color">6</span>x et 12.</p>
+        <p><strong>2. Je mets ce facteur devant la parenthèse.</strong> J'écris <span class="factor-color">6</span>( ... ).</p>
+        <p><strong>3. J'écris ce qui reste dans la parenthèse.</strong> Dans <span class="factor-color">6</span>x, il reste x. Dans 12 = <span class="factor-color">6</span> × 2, il reste 2.</p>
+        <p><strong>Résultat :</strong> 6x + 12 = <span class="factor-color">6</span>(x + 2).</p>
+        <p><strong>Vérification :</strong> si je développe <span class="factor-color">6</span>(x + 2), je retrouve 6x + 12.</p>
+      </div>`,
+      ["Prendre un facteur qui n'est pas commun à tous les termes.", "Oublier un terme dans la parenthèse.", "Écrire seulement 6(x) et oublier le + 2.", "Changer le signe dans la parenthèse."]
     ),
     "math-equations": mathLesson(
       "Équations",

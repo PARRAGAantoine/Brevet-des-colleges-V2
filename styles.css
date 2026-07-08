@@ -896,6 +896,28 @@ input {
   margin-top: 8px;
 }
 
+.guided-steps {
+  display: grid;
+  gap: 10px;
+}
+
+.guided-steps p {
+  margin: 0;
+}
+
+.factor-color {
+  color: #ffd36a;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 6px;
+  background: rgba(246, 183, 60, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(246, 183, 60, 0.28);
+}
+
+.math-term {
+  white-space: nowrap;
+}
+
 .lesson-words div {
   display: flex;
   flex-wrap: wrap;
@@ -926,10 +948,23 @@ html[data-theme="light"] .example-block {
 }
 
 html[data-theme="light"] .secondary,
+html[data-theme="light"] .read-confirm,
 html[data-theme="light"] .choice,
 html[data-theme="light"] select,
 html[data-theme="light"] input {
   background: #ffffff;
+}
+
+html[data-theme="light"] .read-confirm {
+  background: linear-gradient(135deg, #d7f7ee, #82dcc6);
+  border-color: #42b99f;
+  color: #07352e;
+}
+
+html[data-theme="light"] .factor-color {
+  color: #7a4b00;
+  background: #fff1bd;
+  box-shadow: inset 0 0 0 1px #f0c96c;
 }
 
 html[data-theme="light"] .feedback,
@@ -968,6 +1003,7 @@ html[data-theme="light"] .pending-item {
 
 .primary,
 .secondary,
+.read-confirm,
 .choice {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -992,8 +1028,15 @@ html[data-theme="light"] .pending-item {
   color: var(--brand);
 }
 
+.read-confirm {
+  background: linear-gradient(135deg, #1f8f75, #63d3b5);
+  border-color: #63d3b5;
+  color: #061b18;
+}
+
 .primary:hover,
 .secondary:hover,
+.read-confirm:hover,
 .choice:hover {
   filter: brightness(0.98);
   border-color: var(--brand);
@@ -1433,7 +1476,8 @@ label {
 
   .big-action,
   .primary,
-  .secondary {
+  .secondary,
+  .read-confirm {
     width: 100%;
   }
 }
